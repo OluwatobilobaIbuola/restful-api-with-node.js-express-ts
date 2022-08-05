@@ -1,8 +1,9 @@
 import { Request, Response } from "express"
+import { omit } from "lodash"
 import { CreateUserInput } from "../schema/user.schema"
 import { createUser } from "../service/user.service"
 import logger from "../utils/logger"
-import omit from "lodash"
+
 
 
 export async function createUserHandler(
@@ -10,8 +11,10 @@ export async function createUserHandler(
     res:Response
     ){
     try {
-        const user = await createUser(req.body) //call create user service 
-        return res.send(omit(user));
+        logger.info("handler", "user call reached");
+        const user = await createUser(req.body) //call create user
+        logger.info("handler", "user call reached after call");
+        return res.send(user);
     } catch(e: any){
         logger.error(e)
         return res.status(409).send(e.message) //user already exist
